@@ -3,9 +3,9 @@ from __future__ import unicode_literals
 import re
 
 import six
+from django.db import connection
 from django.db.models import Q
 from django.utils.encoding import force_text
-from django.db import connection
 
 from ..settings import DEFAULT_SEARCH_FIELDS
 
@@ -108,7 +108,7 @@ class AutocompleteModel(object):
         """
         assert self.choices is not None, 'choices should be a queryset'
         return self.order_choices(self.choices.filter(
-            pk__in=[x for x in self.values if re.match(r'^[0-9]+$', x)]))
+            pk__in=[unicode(x) for x in self.values if re.match(r'^[0-9]+$', unicode(x))]))
 
     def choices_for_request(self):
         """
